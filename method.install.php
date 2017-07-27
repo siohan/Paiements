@@ -36,7 +36,7 @@ $flds = "
 	licence I(11),
 	ref_action C(15),
 	module C(100),
-	date_created T,
+	date_created D,
 	nom C(150),
 	tarif N(6.2) DEFAULT 0.00,
 	actif I(1) DEFAULT 1,

@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
-# Module: Ping
-# Version: 0.4.6
+# Module: Paiements
+# Version: 0.2
 # Method: Upgrade
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2008 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -19,13 +19,10 @@ if (!isset($gCms)) exit;
 
 $db = $this->GetDb();			/* @var $db ADOConnection */
 $dict = NewDataDictionary($db); 	/* @var $dict ADODB_DataDict */
-/**
- * After this, the code is identical to the code that would otherwise be
- * wrapped in the Upgrade() method in the module body.
- */
+
 $now = trim($db->DBTimeStamp(time()), "'");
 $current_version = $oldversion;
-switch($current_version)
+switch($oldversion)
 {
   // we are now 1.0 and want to upgrade to latest
  
@@ -34,31 +31,20 @@ case "0.1" :
 	
 	{
 		
-		$dict = NewDataDictionary( $db );
+		//$dict = NewDataDictionary( $db );
 
 		// table schema description
-		$flds = "
-			id I(11) AUTO KEY,
-			nom C(100),
-			description C(255),
-			actif I(1)";
-			$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes", $flds, $taboptarray);
+			
+			$sqlarray = $dict->DropColumnSql( cms_db_prefix()."module_paiements_reglements", "date_created");
 			$dict->ExecuteSQLArray($sqlarray);
 		
-		$dict = NewDataDictionary( $db );
-
-		// table schema description
-		$flds = "
-			id I(11) AUTO KEY,
-			id_group I(11),
-			licence I(11)";
-			$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_adherents_groupes_belongs", $flds, $taboptarray);
+	//	$dict = NewDataDictionary( $db );
+		
+		
+			$sqlarray = $dict->AddColumnSql( cms_db_prefix()."module_paiements_reglements", "date_created D");
 			$dict->ExecuteSQLArray($sqlarray);
-		//on créé un index pour cette table
-		$idxoptarray = array('UNIQUE');
-		$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'groupes_belongs',
-			    cms_db_prefix().'module_adherents_groupes_belongs', 'id_group, licence',$idxoptarray);
-		$dict->ExecuteSQLArray($sqlarray);
+
+	
 		
 	}
 		

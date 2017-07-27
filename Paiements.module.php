@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------
 # Module : Cotisations - 
-# Version : 0.1, Sc
+# Version : 0.1.1, Sc
 # Auteur : Claude SIOHAN
 #-------------------------------------------------------------------------
 /**
@@ -20,7 +20,7 @@ class Paiements extends CMSModule
   
   function GetName() { return 'Paiements'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.1beta'; }  
+  function GetVersion() { return '0.1.1'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -41,7 +41,7 @@ class Paiements extends CMSModule
   
   function GetDependencies()
   {
-	return array('Adherents'=>'0.1.1','Commandes'=>'0.3');
+	return array('Adherents'=>'0.2','Commandes'=>'0.3');
   }
 
   
