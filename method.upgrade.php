@@ -27,7 +27,7 @@ switch($oldversion)
   // we are now 1.0 and want to upgrade to latest
  
 	
-case "0.1" : 	
+case "0.1beta" : 	
 	
 	{
 		

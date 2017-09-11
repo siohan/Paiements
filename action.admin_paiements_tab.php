@@ -14,6 +14,7 @@ $smarty->assign('add_edit_paiements',
 		$this->CreateLink($id, 'add_edit_paiements', $returnid,$contents='Ajouter un paiement'));
 $result= array ();
 $query = "SELECT pay.id, pay.nom,pay.date_created, pay.tarif,pay.module,pay.actif, pay.ref_action,pay.licence,pay.statut, CONCAT_WS(' ', adh.nom, adh.prenom) AS joueur FROM ".cms_db_prefix()."module_paiements_paiements AS pay, ".cms_db_prefix()."module_adherents_adherents AS adh WHERE adh.licence = pay.licence";
+$query.=" ORDER BY id ASC";
 $dbresult= $db->Execute($query);
 	
 	//echo $query;
@@ -82,6 +83,7 @@ $dbresult= $db->Execute($query);
 					
 					
 				}
+				//$onerow->delete = $this->CreateLink($id, '', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'),array() );
 				
 				($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
 				$rowarray[]= $onerow;

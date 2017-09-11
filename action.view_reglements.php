@@ -12,6 +12,8 @@ if(isset($params['record_id']) && $params['record_id'] !='')
 	$record_id = $params['record_id'];
 }
 global $themeObject;
+$smarty->assign('retour', 
+$this->CreateLink($id, 'defaultadmin', $returnid, '<- Retour'));
 $shopping = '<img src="../modules/Cotisations/images/paiement.png" class="systemicon" alt="Réglez" title="Réglez">';
 $smarty->assign('shopping', $shopping);
 $false = $themeObject->DisplayImage('icons/extra/false.gif', $this->Lang('false'), '', '', 'systemicon');

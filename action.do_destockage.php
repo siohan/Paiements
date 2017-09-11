@@ -39,6 +39,7 @@ if($error<1)
 			$decrement = $service->decremente_stock_commande($ref_action);
 			if(true === $decrement)
 			{
+				$service->refresh_stock();
 				$this->RedirectToAdminTab('paiements');
 			}
 		}

@@ -41,7 +41,7 @@ class Paiements extends CMSModule
   
   function GetDependencies()
   {
-	return array('Adherents'=>'0.2','Commandes'=>'0.3');
+	return array('Adherents'=>'0.2');
   }
 
   
