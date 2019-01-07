@@ -2,13 +2,16 @@
 if (!isset($gCms)) exit;
 //debug_display($params, 'Parameters');
 
-	if (!$this->CheckPermission('Paiements use'))
+	if (!$this->CheckPermission('Paiements add'))
 	{
 		$designation .=$this->Lang('needpermission');
 		$this->SetMessage("$designation");
 		$this->RedirectToAdminTab('paiements');
 	}
-
+if(isset($params['cancel']) && $params['cancel'] != '')
+{
+	exit;
+}
 //on récupère les valeurs
 //pour l'instant pas d'erreur
 $aujourdhui = date('Y-m-d ');
@@ -66,8 +69,13 @@ $edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
 				//faut-il déstocker le produit ?
 				if($dbresult)
 				{
+					
 					if($module == 'Commandes')
 					{
+						//on change le staut de la commande
+						$commandes = new commandes_ops;
+						$commandes->change_statut_cc($statut='Payée', $record_id);
+						$commandes->cc_items_status($statut='3',$record_id);
 						//on redirige vers une page du style oui, non
 						$this->Redirect($id, 'destockage',$returnid, array("ref_action"=>$record_id));
 					}

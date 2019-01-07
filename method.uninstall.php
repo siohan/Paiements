@@ -40,10 +40,20 @@ $dict = NewDataDictionary( $db );
 $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_paiements_paiements" );
 $dict->ExecuteSQLArray($sqlarray);
 
-// remove the database tables
-$dict = NewDataDictionary( $db );
+
 $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_paiements_reglements" );
 $dict->ExecuteSQLArray($sqlarray);
+
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_paiements_charges" );
+$dict->ExecuteSQLArray($sqlarray);
+
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_paiements_moyens" );
+$dict->ExecuteSQLArray($sqlarray);
+
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_paiements_produits" );
+$dict->ExecuteSQLArray($sqlarray);
+
+
 
 
 

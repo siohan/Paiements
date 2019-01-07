@@ -1,7 +1,7 @@
 <?php
 if( !isset($gCms) ) exit;
 
-if (!$this->CheckPermission('Paiements use'))
+if (!$this->CheckPermission('Paiements add') )
 {
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
@@ -29,7 +29,7 @@ if(is_null($restant) || $restant>0)
 if($edit == 0)
 {
 	//on va chercher les renseignements dans la table paiements
-	$query = "SELECT pay.id, pay.module, pay.ref_action,pay.nom, pay.tarif FROM ".cms_db_prefix()."module_paiements_paiements AS pay WHERE ref_action = ?";
+	$query = "SELECT pay.id, pay.module, pay.ref_action,pay.nom, pay.tarif FROM ".cms_db_prefix()."module_paiements_produits AS pay WHERE ref_action = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	$compt = 0;
 	while ($dbresult && $row = $dbresult->FetchRow())
@@ -45,7 +45,7 @@ if($edit == 0)
 }
 elseif($edit == 1)
 {
-	$query = "SELECT reg.id, pay.ref_action,pay.nom, pay.tarif,pay.module, reg.moyen_paiement, reg.statut, reg.commentaires FROM ".cms_db_prefix()."module_paiements_reglements AS reg, ".cms_db_prefix()."module_paiements_paiements AS pay WHERE pay.ref_action = reg.ref_action AND pay.ref_action = ?";
+	$query = "SELECT reg.id, pay.ref_action,pay.nom, pay.tarif,pay.module, reg.moyen_paiement, reg.statut, reg.commentaires FROM ".cms_db_prefix()."module_paiements_reglements AS reg, ".cms_db_prefix()."module_paiements_produits AS pay WHERE pay.ref_action = reg.ref_action AND pay.ref_action = ?";
 	$dbresult = $db->Execute($query, array($record_id));
 	$compt = 0;
 	while ($dbresult && $row = $dbresult->FetchRow())
@@ -63,7 +63,7 @@ elseif($edit == 1)
 }
 
 $OuiNon = array('Oui'=>'1', 'Non'=>'0');	
-$paiements_types = array("Espèces"=>"Espèces", "Chèque"=>"Chèque", "Chèques vacances"=>"Chèques vacances");	
+$paiements_types = array("Espèces"=>"Espèces", "Chèque"=>"Chèque", "Chèques vacances"=>"Chèques vacances", "Coupon sport"=>"Coupon Sport", "Virement"=>"Virement");	
 	
 	//on construit le formulaire
 	$smarty->assign('formstart',

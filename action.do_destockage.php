@@ -6,7 +6,7 @@ if (!$this->CheckPermission('Paiements use'))
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 global $themeObject;
 $error = 0; //on incrémente un compteur d'erreurs
 $ref_action = '';
@@ -40,6 +40,9 @@ if($error<1)
 			if(true === $decrement)
 			{
 				$service->refresh_stock();
+				//on change le statut de la commande à "Payée et déstockée"
+				$service->change_statut_cc($statut="Payée et déstockée", $ref_action);
+				$service->cc_items_status($statut='4',$ref_action);
 				$this->RedirectToAdminTab('paiements');
 			}
 		}

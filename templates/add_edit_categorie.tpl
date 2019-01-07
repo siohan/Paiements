@@ -1,12 +1,12 @@
 <div class="pageoverflow">
 {$formstart}
 {$record_id}
-{*$categorie_produit*}
+{$categorie}
 
 
 
 <div class="pageoverflow">
-  <p class="pagetext">Produit</p>
+  <p class="pagetext">Libellé</p>
   <p class="pageinput">{$nom}</p>
 </div>
 <div class="pageoverflow">
