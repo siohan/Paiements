@@ -153,6 +153,23 @@ switch($oldversion)
 			}
 		}
 	}
+	case "0.1.5" :
+	{
+		//on modifie les dates des tables en INT(11)
+		$sqlarray = $dict->AlterColumnSQL(cms_db_prefix()."module_paiements_produits",
+						     "date_created I(11)");
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on modifie les dates des tables en INT(11)
+		$sqlarray = $dict->AlterColumnSQL(cms_db_prefix()."module_paiements_charges",
+						     "date_created I(11)");
+		$dict->ExecuteSQLArray($sqlarray);
+		
+		//on modifie les dates des tables en INT(11)
+		$sqlarray = $dict->AlterColumnSQL(cms_db_prefix()."module_paiements_reglements",
+						     "date_created I(11)");
+		$dict->ExecuteSQLArray($sqlarray);
+	}
 		
 }
 

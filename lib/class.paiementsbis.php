@@ -1,25 +1,59 @@
-<?php
+<?php 
+//namespace paiements;
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
-
+//namespace asso_paiements;
 
 class paiementsbis
 {
   function __construct() {}
 
 
-##
-##
 
+##
+##
+function details_paiement($ref_action)
+{
+	$db = cmsms()->GetDb();
+	$query = "SELECT id,licence,categorie, ref_action,module, nom, tarif, actif, statut, date_created FROM ".cms_db_prefix()."module_paiements_produits WHERE ref_action = ?";
+	$dbresult = $db->Execute($query, array($ref_action));
+	if($dbresult)
+	{
+		if($dbresult->RecordCount()>0)
+		{
+			
+			$details = array();
+			while ($dbresult && $row = $dbresult->FetchRow())
+			{
+				$details['id'] = $row['id'];
+				$details['ref_action'] = $row['ref_action'];
+				$details['categorie'] = $row['categorie'];
+				$details['nom'] = $row['nom'];
+				$details['tarif'] = $row['tarif'];
+				$details['date_created'] = $row['date_created'];
+			}
+			return $details;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	
+}
 function add_paiement($licence,$ref_action,$module,$nom,$tarif)
 {
 	global $gCms;
 		//$ping = cms_utils::get_module('paiements'); 
 	$db = cmsms()->GetDb();
-	$now = date('Y-m-d');
+	
 	$query = "INSERT INTO ".cms_db_prefix()."module_paiements_produits (licence,ref_action, date_created, module,nom, tarif) VALUES ( ?, ?, ?, ?, ?, ?)";
-	$dbresult = $db->Execute($query, array($licence,$ref_action,$now,$module,$nom, $tarif));
+	$dbresult = $db->Execute($query, array($licence,$ref_action,time(),$module,$nom, $tarif));
 	if($dbresult)
 	{
 		return TRUE;
@@ -249,8 +283,8 @@ function restant_du_total($ref_action)
 function add_reglement_total($ref_action, $montant)
 {
 	$db = cmsms()->GetDb();
-	$query = "INSERT INTO ".cms_db_prefix()."module_paiements_reglements (ref_action,date_created, montant_paiement) VALUES (?, NOW(), ?)";
-	$dbresult = $db->Execute($query, array($ref_action, $montant));
+	$query = "INSERT INTO ".cms_db_prefix()."module_paiements_reglements (ref_action,date_created, montant_paiement) VALUES (?, ?, ?)";
+	$dbresult = $db->Execute($query, array($ref_action,time(), $montant));
 	if(!$dbresult)
 	{
 		return false;

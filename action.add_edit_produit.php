@@ -6,57 +6,82 @@ if (!$this->CheckPermission('Paiements use'))
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
-global $themeObject;
-$edit = 0; //variable pour savoir s'il s'agit d'un ajout ou d'une modification
-if(isset($params['record_id']) && $params['record_id'] !="")
+//debug_display($_POST, 'Parameters');
+$db = cmsms()->GetDb();
+if(!empty($_POST))
 {
-		$record_id = $params['record_id'];
-		$edit = 1;
-		$query = "SELECT id,licence,categorie, ref_action,module, nom, tarif, actif, statut, date_created FROM ".cms_db_prefix()."module_paiements_produits WHERE ref_action = ?";
-		$dbresult = $db->Execute($query, array($record_id));
-		$compt = 0;
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$compt++;
-			$id = $row['id'];
-			$ref_action = $row['ref_action'];
-			$categorie = $row['categorie'];
-			$nom = $row['nom'];
-			$tarif = $row['tarif'];
-			$date_created = $row['date_created'];
-		}
-}
-	//on construit le formulaire
-	$smarty->assign('formstart',
-			    $this->CreateFormStart( $id, 'do_add_edit_produit', $returnid ) );
-
-	if($edit == 1)
+	if( isset($_POST['cancel']) ) 
 	{
-		$smarty->assign('record_id',$this->CreateInputHidden($id,'record_id',$record_id));
-		
+            $this->RedirectToAdminTab();
+        }
+	//on récupère les valeurs
+
+	//$edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
+
+
+
+			if (isset($_POST['record_id']) && $_POST['record_id'] !='')
+			{
+				$record_id = $_POST['record_id'];
+			}
+			if (isset($_POST['nom']) && $_POST['nom'] !='')
+			{
+				$nom = $_POST['nom'];
+			}	
+
+			$tarif = '';
+			if (isset($_POST['tarif']) && $_POST['tarif'] !='')
+			{
+				$tarif = $_POST['tarif'];
+			}
+
+			$query = "UPDATE  ".cms_db_prefix()."module_paiements_produits SET tarif = ? , nom = ? WHERE ref_action = ?";
+			$dbresult = $db->Execute($query, array($tarif, $nom,$record_id));
+
+			if($dbresult)
+			{
+				$this->SetMessage('Paiement modifié');
+			}
+			else
+			{
+				$this->SetMessage('Erreur : paiement non modifié');
+			}
+
+
+	$this->RedirectToAdminTab('paiements');
+}
+else
+{
+	//debug_display($params, 'Parameters');
+	//les valeurs par défaut
+	$edit = 0; //variable pour savoir s'il s'agit d'un ajout ou d'une modification
+	$nom = '';
+	$tarif = '0.00';
+	$categorie = "";
+	$record_id = 0;
+	$paie_ops = new paiements\paiementsbis;
+	if(isset($params['record_id']) && $params['record_id'] !="")
+	{
+			$record_id = $params['record_id'];
+			$edit = 1;
+			$details = $paie_ops->details_paiement($record_id);
+			$nom = $details['nom'];
+			$tarif = $details['tarif'];
+			$categorie = $details['categorie'];	
+
 	}
-		
-
-	
-	$smarty->assign('categorie',
-			$this->CreateInputDropdown($id,'categorie',(isset($categorie)?$categorie:"")));
-	$smarty->assign('nom',
-			$this->CreateInputText($id,'nom',(isset($nom)?$nom:""),50,200));
-	$smarty->assign('tarif',
-			$this->CreateInputText($id,'tarif',(isset($tarif)?$tarif:""),50,200));			
-	$smarty->assign('date_created',
-			$this->CreateInputDate($id,'date_created',(isset($date_created)?$date_created:"")));		
-	$smarty->assign('submit',
-			$this->CreateInputSubmit($id, 'submit', $this->Lang('submit'), 'class="button"'));
-	$smarty->assign('cancel',
-			$this->CreateInputSubmit($id,'cancel',
-						$this->Lang('cancel')));
-
-
-	$smarty->assign('formend',
-			$this->CreateFormEnd());
-echo $this->ProcessTemplate('add_edit_produit.tpl');
-
+	else
+	{
+		//
+	}
+		//on construit le formulaire
+		$tpl = $smarty->CreateTemplate($this->GetTemplateResource('add_edit_produit.tpl'), null, null, $smarty);
+		$tpl->assign('edit', $edit);
+		$tpl->assign('nom', $nom);
+		$tpl->assign('tarif', $tarif);
+		$tpl->assign('record_id', $record_id);		
+		$tpl->display();
+}
 #
 # EOF
 #

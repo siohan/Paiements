@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------
 # Module : Cotisations - 
-# Version : 0.1.5, Sc
+# Version : 0.1.6, Sc
 # Auteur : Claude SIOHAN
 #-------------------------------------------------------------------------
 /**
@@ -20,7 +20,7 @@ class Paiements extends CMSModule
   
   function GetName() { return 'Paiements'; }   
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
-  function GetVersion() { return '0.1.5'; }  
+  function GetVersion() { return '0.1.6'; }  
   function GetHelp() { return $this->Lang('help'); }   
   function GetAuthor() { return 'Claude SIOHAN'; } 
   function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
@@ -41,7 +41,7 @@ class Paiements extends CMSModule
   
   function GetDependencies()
   {
-	return array('Adherents'=>'0.3');
+	return array('Adherents'=>'0.3.4.4');
   }
 
   
@@ -56,6 +56,10 @@ class Paiements extends CMSModule
   { 
   	$this->RegisterModulePlugin();
 	$this->RestrictUnknownParams();
+	$this->SetParameterType('nom',CLEAN_STRING);
+	//$this->SetParameterType('action',CLEAN_STRING);
+	$this->SetParameterType('record_id', CLEAN_STRING);
+	$this->SetParameterType('tarif', CLEAN_NONE);
 	
 	//form parameters
 	//$this->SetParameterType('submit',CLEAN_STRING);
@@ -63,10 +67,22 @@ class Paiements extends CMSModule
 	
 
 }
+public function InitializeFrontend()
+    {
+        return parent::InitializeFrontend();
+        $this->RegisterModulePlugin();
+        $this->RestrictUnknownParams();
+	$this->SetParameterType('nom',CLEAN_STRING);
+	//$this->SetParameterType('action',CLEAN_STRING);
+	$this->SetParameterType('record_id', CLEAN_STRING);
+	$this->SetParameterType('tarif', CLEAN_NONE);
 
+    }
 function InitializeAdmin()
 {
-  	$this->SetParameters();
+  	return parent::InitializeAdmin();
+	$this->SetParameters();
+	
 	//$this->CreateParameter('pagelimit', 100000, $this->Lang('help_pagelimit'));
 }
 

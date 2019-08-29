@@ -12,6 +12,7 @@ $lang['edit'] = 'Modifier';
 $lang['add'] = 'Ajouter ';
 $lang['submit'] = 'Envoyer';
 $lang['cancel'] = 'Annuler';
+$lang['view'] = 'Voir';
 
 $lang['help'] = '<h3>Que fait ce module ?</h3>
 

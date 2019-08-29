@@ -37,7 +37,7 @@ $flds = "
 	ref_action C(15),
 	categorie I(3),
 	module C(100),
-	date_created D,
+	date_created I(11),
 	nom C(150),
 	tarif N(6.2) DEFAULT 0.00,
 	actif I(1) DEFAULT 1,
@@ -51,7 +51,7 @@ $flds = "
 	ref_action C(15),
 	categorie I(3),
 	module C(100),
-	date_created D,
+	date_created I(11),
 	nom C(150),
 	tarif N(6.2) DEFAULT 0.00,
 	actif I(1) DEFAULT 1,
@@ -68,7 +68,7 @@ $dict = NewDataDictionary( $db );
 $flds = "
 	id I(11) AUTO KEY,
 	ref_action C(15),
-	date_created T,
+	date_created I(11),
 	montant_paiement N(6.2) DEFAULT 0.00,
 	moyen_paiement C(15),
 	statut I(1) DEFAULT 0,
@@ -100,7 +100,7 @@ if( file_exists( $fn ) )
 # Les préférences 
 
 $this->SetPreference('admin_email', 'root@localhost.com');
-$this->SetPreference('sujet_relance_email','[T2T] Relance Facture...');
+$this->SetPreference('sujet_relance_email','[Asso Simple] Relance Facture...');
 
 
 // put mention into the admin log

@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-//debug_display($params, 'Parameters');
+debug_display($params, 'Parameters');
 
 	if (!$this->CheckPermission('Paiements add'))
 	{
@@ -64,7 +64,7 @@ $edit = 0;//pour savoir si on fait un update ou un insert; 0 = insert
 		else // pas d'erreurs on continue
 		{
 				$query = "INSERT INTO ".cms_db_prefix()."module_paiements_reglements (ref_action, date_created, montant_paiement, moyen_paiement, commentaires) VALUES ( ?, ?, ?, ?, ?)";
-				$dbresult = $db->Execute($query, array($record_id, $aujourdhui, $montant_paiement, $moyen_paiement, $commentaires));
+				$dbresult = $db->Execute($query, array($record_id, time(), $montant_paiement, $moyen_paiement, $commentaires));
 				
 				//faut-il déstocker le produit ?
 				if($dbresult)

@@ -1,15 +1,15 @@
 <?php
 if( !isset($gCms) ) exit;
-
+//use paiements\paiementsbis;
 if (!$this->CheckPermission('Paiements use'))
 {
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
 global $themeObject;
-$shopping = '<img src="../modules/Paiements/images/paiement.png" class="systemicon" alt="Réglez" title="Réglez">';
-$relance = '<img src="../modules/Paiements/images/forward-email-16.png" class="systemicon" alt="Envoyer une relance" title="Envoyer une relance">';
-$details_facture = '<img src="../modules/Paiements/images/billing.jpg" class="systemicon" alt="Détails de la facture" title="Détails de la facture">';
+$shopping = 'Régler';//'<img src="../assets/modules/Paiements/images/paiement.png" class="systemicon" alt="Réglez" title="Réglez">';
+$relance = 'Relance';//'<img src="../assets/modules/Paiements/images/forward-email-16.png" class="systemicon" alt="Envoyer une relance" title="Envoyer une relance">';
+$details_facture = '<img src="../assets/modules/Paiements/images/billing.jpg" class="systemicon" alt="Détails de la facture" title="Détails de la facture">';
 $smarty->assign('details_facture', $details_facture);
 $smarty->assign('add_edit_produit',
 		$this->CreateLink($id, 'add_edit_produit', $returnid,$contents='Ajouter une recette'));
@@ -20,7 +20,7 @@ $query = "SELECT pay.id, pay.nom,pay.categorie,pay.date_created, pay.tarif,pay.m
 // , CONCAT_WS(' ', adh.nom, adh.prenom) AS joueur 
 $query.=" FROM ".cms_db_prefix()."module_paiements_produits AS pay";
 // , ".cms_db_prefix()."module_adherents_adherents AS adh WHERE adh.licence = pay.licence";
-$query.=" ORDER BY pay.id ASC";
+$query.=" ORDER BY pay.date_created DESC";
 $dbresult= $db->Execute($query);
 	
 	//echo $query;
@@ -30,7 +30,7 @@ $dbresult= $db->Execute($query);
 	
 		if ($dbresult && $dbresult->RecordCount() > 0)
   		{
-    			$adh_ops = new adherents_spid;
+    			$adh_ops = new Asso_adherents;
 			while ($row= $dbresult->FetchRow())
       			{
 				$onerow= new StdClass();
@@ -48,7 +48,7 @@ $dbresult= $db->Execute($query);
 				$onerow->joueur= $adh_ops->get_name($licence);
 				$onerow->nom = $row['nom'];
 				$onerow->licence = $row['licence'];
-				$onerow->date_created = $row['date_created'];
+				$onerow->date_created = date('d/m/Y H:i:s',$row['date_created']);
 				$onerow->tarif = $row['tarif'];	
 				$reglement = $paiement_ops->is_paid($ref_action);
 				//var_dump($reglement);
@@ -76,7 +76,7 @@ $dbresult= $db->Execute($query);
 							$onerow->statut = $themeObject->DisplayImage('icons/system/false.gif', $this->Lang('delete'), '', '', 'systemicon');
 							$onerow->add_reglement= $this->CreateLink($id, 'add_edit_reglement', $returnid, $shopping, array('record_id'=>$row['ref_action']));
 							$onerow->restant_du = $du;
-							$onerow->editlink= $this->CreateLink($id, 'add_edit_produit', $returnid, $themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array('record_id'=>$row['ref_action']));
+							
 							//on envoie une relance ? si on a bien un mail
 						
 							$onerow->relance=$this->CreateLink($id, 'relance_email',$returnid,$relance, array("licence"=>$row['licence'], "ref_action"=>$row['ref_action']));
@@ -95,6 +95,7 @@ $dbresult= $db->Execute($query);
 					
 					
 				}
+				$onerow->editlink= $this->CreateLink($id, 'add_edit_produit', $returnid, $themeObject->DisplayImage('icons/system/edit.gif', $this->Lang('edit'), '', '', 'systemicon'), array('record_id'=>$row['ref_action']));
 				//$onerow->delete = $this->CreateLink($id, '', $returnid, $themeObject->DisplayImage('icons/system/delete.gif', $this->Lang('delete'), '', '', 'systemicon'),array() );
 				
 				($rowclass == "row1" ? $rowclass= "row2" : $rowclass= "row1");
@@ -109,7 +110,7 @@ $dbresult= $db->Execute($query);
 		
 		
 
-echo $this->ProcessTemplate('paiements.tpl');
+echo $this->ProcessTemplate('produits.tpl');
 
 
 #
